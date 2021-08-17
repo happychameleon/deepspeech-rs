@@ -1,3 +1,3 @@
 fn main() {
-    println!("cargo:rustc-link-lib=deepspeech");
+    println!("cargo:rustc-link-lib=libdeepspeech.so");
 }
