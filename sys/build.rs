@@ -1,4 +1,5 @@
-// based on the https://github.com/tensorflow/rust/blob/master/tensorflow-sys/build.rs build file
+// based on the https://github.com/tensorflow/rust/blob/master/tensorflow-sys/build.rs 
+// and https://github.com/danigm/gettext-rs/blob/master/gettext-sys/build.rs build files
 
 extern crate curl;
 extern crate pkg_config;
@@ -30,15 +31,11 @@ fn main() {
 fn install_prebuilt() {
     let zip_file_name = "libdeepspeech.zip";
 
-    let download_dir = env::var("OUT_DIR").expect("could not create download_dir");
-    let download_dir = PathBuf::from(download_dir);
+    let path_to_zip = env::current_dir().expect("could not get current dir");
+    let path_to_zip = PathBuf::from(path_to_zip);
     let out_dir = env::var("OUT_DIR").unwrap();
 
-    if !download_dir.exists() {
-        fs::create_dir(&download_dir).unwrap();
-    }
-
-    let file_name = download_dir.join(PathBuf::from(zip_file_name));
+    let file_name = path_to_zip.join(PathBuf::from(zip_file_name));
 
     if !file_name.exists() {
         let f = File::create(&file_name).unwrap();
@@ -61,13 +58,15 @@ fn install_prebuilt() {
     }
 
     // Extract deepspeech zip
-    let unpacked_dir = download_dir.join(PathBuf::from("libdeepspeech"));
+    let output = PathBuf::from(env::var("OUT_DIR").unwrap());
+
+    let unpacked_dir = PathBuf::from(&output).join(PathBuf::from("libdeepspeech"));
     let lib_dir  = unpacked_dir.join("libdeepspeech");
 
     extract_zip(file_name, &unpacked_dir);
     println!("cargo:rustc-link-lib={}", LIBRARY);
 
-    let output = PathBuf::from(env::var("OUT_DIR").unwrap());
+    
 
     let framework_files = std::fs::read_dir(lib_dir).unwrap();
     
