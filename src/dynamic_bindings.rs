@@ -76,7 +76,7 @@ inner : std :: sync :: Arc < libloading :: Library > ,
 }
  impl LibraryWrapper {
 pub fn from_path (path : impl AsRef < std :: ffi :: OsStr >) -> Result < Self , libloading :: Error > {
-let inner = std :: sync :: Arc :: new (libloading :: Library :: new (& path) ?) ;
+let inner = std :: sync :: Arc :: new (unsafe{libloading :: Library :: new (& path) ?} ) ;
  Ok (Self { inner })
 }
  pub unsafe fn DS_ErrorCodeToErrorMessage (& self , aErrorCode : :: std :: os :: raw :: c_int ,) -> Result < * mut :: std :: os :: raw :: c_char , libloading :: Error > {

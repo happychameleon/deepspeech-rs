@@ -48,7 +48,9 @@ fn main() {
 			}
 		}
 	}
-	let mut m = Model::load_from_files(&graph_name).unwrap();
+	let native_client_path = "native_client/libdeepspeech.so";
+	let native_client_path = Path::new(&native_client_path);
+	let mut m =  Model::load_from_files(&graph_name).unwrap();
 	// enable external scorer if found in the model folder
 	if let Some(scorer) = scorer_name {
 		println!("Using external scorer `{}`", scorer.to_str().unwrap());
