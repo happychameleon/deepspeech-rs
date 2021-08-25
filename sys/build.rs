@@ -1,23 +1,18 @@
 // based on the https://github.com/tensorflow/rust/blob/master/tensorflow-sys/build.rs 
 // and https://github.com/danigm/gettext-rs/blob/master/gettext-sys/build.rs build files
 
-extern crate curl;
 extern crate pkg_config;
 extern crate zip;
 
 use std::env;
 use std::fs::{self, File};
 use std::io;
-use std::io::{BufWriter, Write};
 use std::path::Path;
 use std::path::PathBuf;
 
-use curl::easy::Easy;
 use zip::ZipArchive;
 
 const LIBRARY: &str = "deepspeech";
-const LIBRARY_URL: &str = "https://github.com/happychameleon/deepspeech_bin/raw/main/libdeepspeech.zip";
-
 fn main() {
     // Note that pkg_config will print cargo:rustc-link-lib and cargo:rustc-link-search as
     // appropriate if the library is found.
@@ -36,26 +31,6 @@ fn install_prebuilt() {
     let out_dir = env::var("OUT_DIR").unwrap();
 
     let file_name = path_to_zip.join(PathBuf::from(zip_file_name));
-
-    if !file_name.exists() {
-        let f = File::create(&file_name).unwrap();
-        let mut writer = BufWriter::new(f);
-        let mut easy = Easy::new();
-        let deepspeech_url = LIBRARY_URL;
-        easy.follow_location(true).unwrap();
-        easy.url(&deepspeech_url).expect("could not open deepspeech_url");
-        easy.write_function(move |data| Ok(writer.write(data).unwrap()))
-            .unwrap();
-        easy.perform().unwrap();
-
-        let response_code = easy.response_code().unwrap();
-        if response_code != 200 {
-            panic!(
-                "Unexpected response code {} for {}",
-                response_code, deepspeech_url
-            );
-        }
-    }
 
     // Extract deepspeech zip
     let output = PathBuf::from(env::var("OUT_DIR").unwrap());

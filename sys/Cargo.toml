@@ -11,6 +11,5 @@ include = ["deepspeech/native_client/deepspeech.h", "/src/**",
 	"/build.rs", "/LICENSE", "Cargo.toml"]
 
 [build-dependencies]
-curl = { version = "0.4.38", features = ["static-curl"]}
 pkg-config = "0.3.19"
 zip = "0.5.13"
