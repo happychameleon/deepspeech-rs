@@ -62,7 +62,7 @@ fn install_prebuilt() {
 
     // Extract deepspeech zip
     let unpacked_dir = download_dir.join(PathBuf::from("libdeepspeech"));
-    let lib_dir  = unpacked_dir.join("libdeepspeech ");
+    let lib_dir  = unpacked_dir.join("libdeepspeech");
 
     extract_zip(file_name, &unpacked_dir);
     println!("cargo:rustc-link-lib={}", LIBRARY);
